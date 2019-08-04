@@ -15,6 +15,7 @@ var budgetController = (function() {
   // Private function to calculate the income and expenses
   var calculateTotal = function(type) {
     var sum = 0;
+
     data.allItems[type].forEach(function(cur) {
       sum += cur.value;
     });
@@ -148,6 +149,12 @@ var UIController = (function() {
       document.querySelector(element).insertAdjacentHTML("beforeend", newHtml);
     },
 
+    deleteListItem: function(selectorID) {
+      var el = document.getElementById(selectorID);
+
+      el.parentNode.removeChild(el);
+    },
+
     clearFields: function() {
       var fields, fieldsArr;
       fields = document.querySelectorAll(
@@ -155,7 +162,7 @@ var UIController = (function() {
       );
 
       fieldsArr = Array.prototype.slice.call(fields);
-      fields.forEach(function(current, index, array) {
+      fieldsArr.forEach(function(current, index, array) {
         current.value = "";
       });
       fieldsArr[0].focus();
@@ -171,7 +178,7 @@ var UIController = (function() {
         document.querySelector(DOMstrings.precentageLabel).textContent =
           obj.precentage + "%";
       } else {
-        document.querySelector(DOMstrings.precentageLabel).textContent = "--";
+        document.querySelector(DOMstrings.precentageLabel).textContent = "---";
       }
     },
 
@@ -239,8 +246,9 @@ var controller = (function(budgetCtrl, UICtrl) {
       //1. Delete the item from the data structure
       budgetCtrl.deleteItem(type, ID);
       //2. Delete the Item from the UI
-
+      UICtrl.deleteListItem(itemID);
       //3. Update the budget
+      updateBudget();
     }
   };
 
